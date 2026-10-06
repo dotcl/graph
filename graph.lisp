@@ -236,13 +236,13 @@
   (make-hash-table :test 'edge-equalp)
   #+clisp
   (make-hash-table :test 'edge-equalp)
-  #+(or ccl lispworks)
+  #+(or ccl lispworks dotcl)
   (make-hash-table :test 'edge-equalp :hash-function 'sxhash-edge)
   #+allegro
   (make-hash-table :test 'edge-equalp)
   #+ecl
   (make-hash-table :test 'edge-equalp :hash-function 'sxhash-edge)
-  #-(or sbcl clisp ccl allegro lispworks ecl)
+  #-(or sbcl clisp ccl allegro lispworks ecl dotcl)
   (error "unsupport lisp distribution"))
 
 (defun make-diedge-hash-table ()
@@ -250,13 +250,13 @@
   (make-hash-table :test 'dir-edge-equalp)
   #+clisp
   (make-hash-table :test 'dir-edge-equalp)
-  #+(or ccl lispworks)
+  #+(or ccl lispworks dotcl)
   (make-hash-table :test 'dir-edge-equalp :hash-function 'sxhash)
   #+allegro
   (make-hash-table :test 'dir-edge-equalp)
   #+ecl
   (make-hash-table :test 'dir-edge-equalp :hash-function 'sxhash)
-  #-(or sbcl clisp ccl allegro lispworks ecl)
+  #-(or sbcl clisp ccl allegro lispworks ecl dotcl)
   (error "unsupport lisp distribution"))
 
 
@@ -285,7 +285,7 @@ to a new equality test specified with TEST."
         (copy
          #+sbcl (make-hash-table :test (or test (hash-table-test hash)))
          #+clisp (make-hash-table :test (or test (hash-table-test hash)))
-         #+(or ccl lispworks)
+         #+(or ccl lispworks dotcl)
          (make-hash-table
           :test (or test (hash-table-test hash))
           :hash-function (case (or test (hash-table-test hash))
@@ -298,7 +298,7 @@ to a new equality test specified with TEST."
                            (cond ((eql test #'edge-equalp) 'sxhash-edge)
                                  ((member test (list #'dir-edge-equalp #'equalp))
                                   'sxhash))))
-         #-(or sbcl clisp ccl lispworks ecl)
+         #-(or sbcl clisp ccl lispworks ecl dotcl)
          (error "unsupported lisp distribution")))
     (maphash (lambda (k v) (setf (gethash k copy)
                             (if (and (gethash k copy) comb)
